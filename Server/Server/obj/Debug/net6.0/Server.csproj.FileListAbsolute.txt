@@ -12,3 +12,7 @@ C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\refint\Server.
 C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\Server.pdb
 C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\Server.genruntimeconfig.cache
 C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\ref\Server.dll
+C:\Users\Seolang\Desktop\MMOServer\Server\Server\bin\Debug\net6.0\ServerCore.dll
+C:\Users\Seolang\Desktop\MMOServer\Server\Server\bin\Debug\net6.0\ServerCore.pdb
+C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\Server.csproj.AssemblyReference.cache
+C:\Users\Seolang\Desktop\MMOServer\Server\Server\obj\Debug\net6.0\Server.csproj.CopyComplete

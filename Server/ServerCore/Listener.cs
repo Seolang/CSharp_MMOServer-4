@@ -3,16 +3,16 @@ using System.Net.Sockets;
 
 namespace ServerCore
 {
-    class Listener
+    public class Listener
     {
         // 문지기
         Socket _listenSocket;
-        Action<Socket> _onAcceptHandler;
+        Func<Session> _sessionFactory;
 
-        public void Init(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            _onAcceptHandler += onAcceptHandler;
+            _sessionFactory += sessionFactory;
 
             // 문지기 교육
             _listenSocket.Bind(endPoint);
@@ -33,7 +33,7 @@ namespace ServerCore
         {
             args.AcceptSocket = null; // 이전 소켓 연결 정보를 지워줌
 
-            bool pending = _listenSocket.AcceptAsync(args);
+            bool pending = _listenSocket.AcceptAsync(args); // 비동기적으로 연결을 기다림
 
             if (pending == false) // 실행하자 마자 바로 클라이언트가 연결됨
             {
@@ -45,7 +45,9 @@ namespace ServerCore
         {
             if (args.SocketError == SocketError.Success) // 에러 없이 잘 되었다
             {
-                _onAcceptHandler.Invoke(args.AcceptSocket); // onAcceptHandler에 등록된 함수에 AcceptSocket을 넣어 실행
+                Session session = _sessionFactory.Invoke();
+                session.Start(args.AcceptSocket);
+                session.OnConnected(args.AcceptSocket.RemoteEndPoint);
             }
             else
             {

@@ -12,3 +12,7 @@ C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\refint\Du
 C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\DummyClient.pdb
 C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\DummyClient.genruntimeconfig.cache
 C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\ref\DummyClient.dll
+C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\DummyClient.csproj.AssemblyReference.cache
+C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\bin\Debug\net6.0\ServerCore.dll
+C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\bin\Debug\net6.0\ServerCore.pdb
+C:\Users\Seolang\Desktop\MMOServer\Server\DummyClient\obj\Debug\net6.0\DummyClient.csproj.CopyComplete

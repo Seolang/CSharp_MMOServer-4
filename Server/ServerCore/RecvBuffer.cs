@@ -11,6 +11,7 @@ namespace ServerCore
         public RecvBuffer(int bufferSize)
         {
             // ArraySegment는 어떤 배열의 일부분을 참조해 가져오는 것
+            // struct이므로 heap에 새로 할당하는 것이 아닌, stack에 저장한다 (메모리 가비지 부담이 적다)
             _buffer = new ArraySegment<byte>(new byte[bufferSize], 0, bufferSize);
         }
 

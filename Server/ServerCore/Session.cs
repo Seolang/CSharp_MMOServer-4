@@ -5,6 +5,43 @@ using System.Text;
 
 namespace ServerCore
 {
+    public abstract class PacketSession : Session
+    {
+        public static readonly int HeaderSize = 2;
+
+        // sealed를 붙이면 이 클래스를 상속받는 클래스는 해당 메소드를 override를 할 수 없다
+        // [size(2)][packetId(2)][...][size(2)][packetId(2)][...]
+        public sealed override int OnRecv(ArraySegment<byte> buffer)
+        {
+            int processLen = 0;
+
+            // 조립 가능한 모든 패킷을 처리
+            while (true)
+            {
+                // 최소한 헤더는 파싱할 수 있는지 확인
+                if (buffer.Count < HeaderSize)
+                    break;
+
+                // 패킷이 완전체로 도착했는지 확인 (Packet의 size 부분을 가져와서 확인)
+                ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+                if (buffer.Count < dataSize)
+                    break;
+
+                // 여기까지 왔으면 패킷 조립 가능
+                OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
+
+                processLen += dataSize;
+
+                // 다음 패킷 시작 부분을 시작점으로 하는 세그먼트를 buffer에 대체
+                buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+            }
+
+            return processLen;
+        }
+
+        public abstract void OnRecvPacket(ArraySegment<byte> buffer);
+    }
+
     public abstract class Session
     {
         Socket _socket;
@@ -13,7 +50,7 @@ namespace ServerCore
         RecvBuffer _recvBuffer = new RecvBuffer(1024);
 
         object _lock = new object();
-        Queue<byte[]> _sendQueue = new Queue<byte[]>();
+        Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
 
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
 
@@ -46,7 +83,7 @@ namespace ServerCore
             _socket.Close();
             
         }
-        public void Send(byte[] sendBuff)
+        public void Send(ArraySegment<byte> sendBuff)
         {
             lock (_lock)
             {
@@ -65,7 +102,7 @@ namespace ServerCore
         {
             while (_sendQueue.Count > 0)
             {
-                byte[] buff = _sendQueue.Dequeue();
+                ArraySegment<byte> buff = _sendQueue.Dequeue();
                 //_sendArgs.BufferList.Add(new ArraySegment<byte>(buff, 0, buff.Length)); // BufferList에 하나씩 Add 하면 안되고 
                 _pendingList.Add(buff);
             }

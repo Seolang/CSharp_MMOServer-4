@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DummyClient", "DummyClient\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiThreadProgramming", "MultiThreadProgramming\MultiThreadProgramming.csproj", "{54F12738-9480-4010-9F9A-B6E2934AB2EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\ServerCore.csproj", "{BFB1A4DD-1AE6-4B0E-B17E-BCAED03E251C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerCore", "ServerCore\ServerCore.csproj", "{BFB1A4DD-1AE6-4B0E-B17E-BCAED03E251C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{6C47690B-728E-49F1-B467-6EA83FD01904}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B3DCD5F1-32DA-46A1-BD00-9281B20387BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{BFB1A4DD-1AE6-4B0E-B17E-BCAED03E251C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB1A4DD-1AE6-4B0E-B17E-BCAED03E251C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFB1A4DD-1AE6-4B0E-B17E-BCAED03E251C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C47690B-728E-49F1-B467-6EA83FD01904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C47690B-728E-49F1-B467-6EA83FD01904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C47690B-728E-49F1-B467-6EA83FD01904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C47690B-728E-49F1-B467-6EA83FD01904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C47690B-728E-49F1-B467-6EA83FD01904} = {B3DCD5F1-32DA-46A1-BD00-9281B20387BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2399A9DE-ECF4-4D76-86D1-02E19A9E2B89}

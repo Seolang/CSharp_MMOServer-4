@@ -15,7 +15,7 @@ namespace ServerCore
         public abstract void Read(ArraySegment<byte> s);
     }
 
-    class PlayerInfoReq : DeprecatedPacket
+    class DeprecatedPlayerInfoReq : DeprecatedPacket
     {
         public long playerId;
         public string name;
@@ -137,7 +137,7 @@ namespace ServerCore
         }
     }
 
-    public enum PacketID
+    public enum DeprecatedPacketID
     {
         PlayerInfoReq = 1,
         PlayerInfoOk = 2,

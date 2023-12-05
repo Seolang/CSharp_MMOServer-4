@@ -52,9 +52,9 @@ namespace ServerCore
 
         public List<SkillInfo> skills = new List<SkillInfo>();
 
-        public PlayerInfoReq()
+        public DeprecatedPlayerInfoReq()
         {
-            this.packetId = (ushort)PacketID.PlayerInfoReq;
+            this.packetId = (ushort)DeprecatedPacketID.PlayerInfoReq;
         }
 
         public override void Read(ArraySegment<byte> segment)

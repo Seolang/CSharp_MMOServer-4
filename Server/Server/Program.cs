@@ -10,6 +10,8 @@ namespace Server
 
         static void Main(string[] args)
         {
+            PacketManager.Instance.Register(); // 패킷 매니저 초기설정
+
             // DNS (Domain Name System)
             // ex) www.naver.com -> 123.456.789.012
             string host = Dns.GetHostName();

@@ -3,6 +3,9 @@ using System.Net.Sockets;
 
 namespace ServerCore
 {
+    /*
+     * 클라이언트로부터 연결을 받기 위한 리스너
+     */
     public class Listener
     {
         // 문지기

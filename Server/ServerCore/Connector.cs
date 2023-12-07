@@ -3,6 +3,9 @@ using System.Net.Sockets;
 
 namespace ServerCore
 {
+    /*
+     * 서버 연결을 위한 커넥터
+     */
     public class Connector
     {
         Func<Session> _sessionFactory;

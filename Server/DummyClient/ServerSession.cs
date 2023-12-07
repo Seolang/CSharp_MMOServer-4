@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DummyClient
 {
+    /*
+     * 클라이언트에서 서버에 대한 연결을 가지고 있는 클래스
+     */
     class ServerSession : Session // Session Inteface를 통해 다양한 세션 타입 정의 가능
     {
         public override void OnConnected(EndPoint endPoint)
@@ -22,7 +25,6 @@ namespace DummyClient
             ArraySegment<byte> s = packet.Write();
             if (s != null)
                 Send(s);
-
         }
 
         public override void OnDisconnect(EndPoint endPoint)

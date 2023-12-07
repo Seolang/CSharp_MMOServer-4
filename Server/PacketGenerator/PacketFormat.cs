@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PacketGenerator
 {
+    /*
+     * 패킷 생성기
+     */
     class PacketFormat
     {
         // {0} 패킷 등록

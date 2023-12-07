@@ -51,7 +51,6 @@ namespace ServerCore
 
         object _lock = new object();
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
-
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
 
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs(); // sendArg 재사용
@@ -61,6 +60,15 @@ namespace ServerCore
         public abstract void OnDisconnect(EndPoint endPoint);
         public abstract void OnSend(int numOfBytes);
         public abstract int OnRecv(ArraySegment<byte> buffer);
+
+        void Clear()
+        {
+            lock (_lock)
+            {
+                _sendQueue.Clear();
+                _pendingList.Clear();
+            }
+        }
 
         public void Start(Socket socket)
         {
@@ -72,7 +80,6 @@ namespace ServerCore
             RegisterRecv();
         }
 
-
         public void Disconnect()
         {
             if (Interlocked.Exchange(ref _disconnected, 1) == 1) 
@@ -81,8 +88,9 @@ namespace ServerCore
             OnDisconnect(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
-            
+            Clear();
         }
+
         public void Send(ArraySegment<byte> sendBuff)
         {
             lock (_lock)
@@ -100,6 +108,9 @@ namespace ServerCore
         #region Send
         void RegisterSend()
         {
+            if (_disconnected == 1)
+                return;
+
             while (_sendQueue.Count > 0)
             {
                 ArraySegment<byte> buff = _sendQueue.Dequeue();
@@ -109,17 +120,22 @@ namespace ServerCore
 
             _sendArgs.BufferList = _pendingList; // List를 만든다음에 한번에 넣어줘야함
 
-            bool pending = _socket.SendAsync(_sendArgs);
-            if (pending == false)
+            try
             {
-                OnSendCompleted(null, _sendArgs);
+                bool pending = _socket.SendAsync(_sendArgs);
+                if (pending == false)
+                    OnSendCompleted(null, _sendArgs);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"RegisterSend Failed {e}");
             }
         }
 
         void OnSendCompleted(object sender, SocketAsyncEventArgs args)
         {
-            // OnSendCompleted는 상위 RegisterSend가 lock 환경에서 명시적으로 실행되기 때문에 다시 lock을 걸 필요가 없음
-            // 하지만 OnSendCompleted는 콜백함수로 실행되어 lock 환경에 존재하지 않으며,
+            // pendingh이 false일때 OnSendCompleted는 상위 RegisterSend가 lock 환경에서 명시적으로 실행되기 때문에 다시 lock을 걸 필요가 없음
+            // 하지만 pending이 true일 때 OnSendCompleted는 콜백함수로 실행되어 lock 환경에 존재하지 않으며,
             // 내부적으로 접근하는 데이터가 다른 곳에서도 접근 가능하다면 lock을 걸어 접근 불가능하게 만들어야 한다
 
             // (추가) 이미 상위 메소드에서 _lock에 대한 권한을 획득한 쓰레드는 이어서 해당 _lock에 접근할 수 있음
@@ -153,14 +169,24 @@ namespace ServerCore
         #region Receive
         void RegisterRecv()
         {
+            if (_disconnected == 1)
+                return;
+
             _recvBuffer.Clean();
             ArraySegment<byte> segment = _recvBuffer.WriteSegment;
             // 사용 가능한 버퍼 공간을 할당 
             _recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
 
-            bool pending = _socket.ReceiveAsync(_recvArgs);
-            if (pending == false)
-                OnRecvCompleted(null, _recvArgs);
+            try
+            {
+                bool pending = _socket.ReceiveAsync(_recvArgs);
+                if (pending == false)
+                    OnRecvCompleted(null, _recvArgs);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"RegisterReceive Failed {e}");
+            }
         }
 
         void OnRecvCompleted(object sender, SocketAsyncEventArgs args)

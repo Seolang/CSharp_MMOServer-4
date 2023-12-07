@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using Server.Session;
 using ServerCore;
 
 namespace Server
@@ -7,6 +8,7 @@ namespace Server
     class Program
     {
         static Listener _listner = new Listener();
+        public static GameRoom Room = new GameRoom();
 
         static void Main(string[] args)
         {
@@ -20,7 +22,7 @@ namespace Server
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 
-            _listner.Init(endPoint, () => { return new ClientSession(); });
+            _listner.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 
             while (true)
             {

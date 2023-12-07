@@ -16,19 +16,20 @@ namespace DummyClient
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
             Connector connector = new Connector();
-            connector.Connect(endPoint, () => { return new ServerSession(); });
+            connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); }, 100); // count 만큼 더미 생성
 
             while (true)
             {
                 try
                 {
+                    SessionManager.Instance.SendForEach();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(250); // MMO에서는 이동 패킷을 대략 1초에 4번 전송함
             }
         }
     }

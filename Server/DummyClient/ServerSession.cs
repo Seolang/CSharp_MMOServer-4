@@ -8,23 +8,11 @@ namespace DummyClient
     /*
      * 클라이언트에서 서버에 대한 연결을 가지고 있는 클래스
      */
-    class ServerSession : Session // Session Inteface를 통해 다양한 세션 타입 정의 가능
+    class ServerSession : PacketSession // Session Inteface를 통해 다양한 세션 타입 정의 가능
     {
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
-
-            C_PlayerInfoReq packet = new C_PlayerInfoReq() { playerId = 1001, name = "ABCD" };
-            var skill = new C_PlayerInfoReq.Skill() { id = 101, level = 1, duration = 3.0f };
-            skill.attributes.Add(new C_PlayerInfoReq.Skill.Attribute() { att = 77 });
-            packet.skills.Add(skill);
-            packet.skills.Add(new C_PlayerInfoReq.Skill() { id = 201, level = 2, duration = 4.0f });
-            packet.skills.Add(new C_PlayerInfoReq.Skill() { id = 301, level = 3, duration = 5.0f });
-            packet.skills.Add(new C_PlayerInfoReq.Skill() { id = 401, level = 4, duration = 6.0f });
-
-            ArraySegment<byte> s = packet.Write();
-            if (s != null)
-                Send(s);
         }
 
         public override void OnDisconnect(EndPoint endPoint)
@@ -32,18 +20,14 @@ namespace DummyClient
             Console.WriteLine($"OnDisconnected : {endPoint}");
         }
 
-        public override int OnRecv(ArraySegment<byte> buffer)
+        public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
-            Console.WriteLine($"[From Server] {recvData}");
-
-            return buffer.Count;
+            PacketManager.Instance.OnRecvPacket(this, buffer);
         }
 
         public override void OnSend(int numOfBytes)
         {
-            Console.WriteLine($"Transferred bytes: {numOfBytes}");
-
+            //Console.WriteLine($"Transferred bytes: {numOfBytes}");
         }
     }
 }

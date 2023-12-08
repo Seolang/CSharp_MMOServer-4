@@ -16,8 +16,8 @@ namespace Server.Session
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            // TODO
-            Program.Room.Enter(this); // GameRoom 접속
+            // 게임 룸 접속을 JobQueue로 처리
+            Program.Room.Push(() => Program.Room.Enter(this));
         }
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
@@ -30,7 +30,9 @@ namespace Server.Session
             SessionManager.Instance.Remove(this); // 세션 목록에서 삭제
             if (Room != null)
             {
-                Room.Leave(this); // GameRoom 접속 해제
+                // 게임 룸 나가기 JobQueue 처리
+                GameRoom room = Room; // 작업 예약 후 Room을 null로 밀어버려서 찾지를 못하게 됨, 따라서 객체 주소를 복사해놓는다
+                room.Push(() => room.Leave(this)); 
                 Room = null;
             }
 

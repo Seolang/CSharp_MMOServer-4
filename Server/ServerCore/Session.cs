@@ -91,6 +91,10 @@ namespace ServerCore
             Clear();
         }
 
+        /*
+         * 처음 Send를 실행하는(_pendingList.Count가 0인 상태) 쓰레드라면 RegisterSend를 호출해 큐에 쌓인 패킷 처리까지 실행
+         * 그게 아니라면 Queue에 넣기만 하고 끝냄
+         */
         public void Send(ArraySegment<byte> sendBuff)
         {
             lock (_lock)

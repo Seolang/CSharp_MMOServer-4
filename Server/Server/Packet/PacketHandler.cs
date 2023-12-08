@@ -1,4 +1,5 @@
-﻿using Server.Session;
+﻿using Server;
+using Server.Session;
 using ServerCore;
 
 /*
@@ -15,6 +16,10 @@ class PacketHandler
         if (clientSession.Room == null)
             return;
 
-        clientSession.Room.BroadCast(clientSession, chatPacket.chat);
+        // BroadCast를 즉시 하지 않고, JobQueue로 처리
+        GameRoom room = clientSession.Room; // 작업 예약 후 Room이 null로 바뀌어 Exception이 발생할 수도 있으므로 객체 주소를 복사해놓는다
+        room.Push(
+            () => room.BroadCast(clientSession, chatPacket.chat)
+        );
     }
 }

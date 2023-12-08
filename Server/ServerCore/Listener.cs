@@ -12,7 +12,7 @@ namespace ServerCore
         Socket _listenSocket;
         Func<Session> _sessionFactory;
 
-        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _sessionFactory += sessionFactory;
@@ -22,14 +22,14 @@ namespace ServerCore
 
             // 영업 시작
             // backlog : 최대 대기수
-            _listenSocket.Listen(10);
+            _listenSocket.Listen(backlog);
 
-            //for(int i=0; i<10; i++) // 리스너를 여러개 두어 여러 연결을 동시에 받을 수도 있다
-            //{
+            for(int i = 0; i < register; i++) // 리스너를 register 만큼 대기 시킴
+            {
                 SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted); // pending == true 일시 클라이언트의 접속 후 실행할 콜백 설정
                 RegisterAccept(args);
-            //}
+            }
         }
 
         void RegisterAccept(SocketAsyncEventArgs args)  // 클라이언트 접속을 연결하는 함수

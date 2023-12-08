@@ -28,6 +28,7 @@ namespace Server
 
             //lock (_lock)
             //{
+                // N ^ 2 시간이 걸린다 => 브로드캐스팅과 같은 작업은 패킷 모아보내기가 필수
                 foreach (ClientSession s in _sessions)
                     s.Send(segment);
             //}

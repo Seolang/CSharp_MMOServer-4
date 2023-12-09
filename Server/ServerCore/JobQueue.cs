@@ -7,7 +7,7 @@ namespace ServerCore
     }
 
     /*
-     * JobQueue의 실행 정책 2가지
+     * JobQueue의 실행 정책 2가지 방법
      * 1. 메인 쓰레드가 순차적으로 돌면서 queue를 비우기
      * 2. Push 시 맨 처음 queue에 넣는 경우라면 전체 실행하기, 아니면 넣기만 하고 끝내기 방식
      */

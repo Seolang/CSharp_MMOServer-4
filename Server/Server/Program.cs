@@ -24,7 +24,9 @@ namespace Server
 
             while (true)
             {
-                ; // 프로그램이 종료되지 않게 유지
+                // 0.25초 마다 모았던 패킷을 한번에 보냄
+                Room.Push(() => Room.Flush());
+                Thread.Sleep(250);
             }
         }
     }

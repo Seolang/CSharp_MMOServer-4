@@ -14,6 +14,7 @@ namespace ServerCore
         public sealed override int OnRecv(ArraySegment<byte> buffer)
         {
             int processLen = 0;
+            int packetCount = 0;
 
             // 조립 가능한 모든 패킷을 처리
             while (true)
@@ -29,11 +30,17 @@ namespace ServerCore
 
                 // 여기까지 왔으면 패킷 조립 가능
                 OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
+                packetCount++;
 
                 processLen += dataSize;
 
                 // 다음 패킷 시작 부분을 시작점으로 하는 세그먼트를 buffer에 대체
                 buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+            }
+
+            if (packetCount > 1)
+            {
+                Console.WriteLine($"패킷 모아보내기 : {packetCount}");
             }
 
             return processLen;
@@ -47,7 +54,7 @@ namespace ServerCore
         Socket _socket;
         int _disconnected = 0;
 
-        RecvBuffer _recvBuffer = new RecvBuffer(1024);
+        RecvBuffer _recvBuffer = new RecvBuffer(65535);
 
         object _lock = new object();
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
@@ -101,9 +108,23 @@ namespace ServerCore
             {
                 _sendQueue.Enqueue(sendBuff);
                 if (_pendingList.Count == 0)
-                {
                     RegisterSend();
-                }
+            }
+        }
+
+        // 여러개의 전송할 내용을 한번에 받는 메소드
+        public void Send(List<ArraySegment<byte>> sendBuffList)
+        {
+            if (sendBuffList.Count == 0)
+                return;
+
+            lock (_lock)
+            {
+                foreach (ArraySegment<byte> sendBuff in sendBuffList)
+                    _sendQueue.Enqueue(sendBuff);
+
+                if (_pendingList.Count == 0)
+                    RegisterSend();
             }
         }
 

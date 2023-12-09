@@ -39,9 +39,7 @@ namespace ServerCore
             }
 
             if (packetCount > 1)
-            {
                 Console.WriteLine($"패킷 모아보내기 : {packetCount}");
-            }
 
             return processLen;
         }
@@ -229,7 +227,8 @@ namespace ServerCore
 
                     // 컨텐츠 쪽으로 데이터를 넘겨주고 얼마나 처리했는지 받는다
                     int processLen = OnRecv(_recvBuffer.ReadSegment);
-                    if ( processLen < 0 || _recvBuffer.DataSize < processLen) {
+                    if ( processLen < 0 || _recvBuffer.DataSize < processLen)
+                    {
                         Disconnect();
                         return;
                     }

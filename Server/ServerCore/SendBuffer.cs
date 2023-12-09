@@ -53,7 +53,7 @@ namespace ServerCore
         public ArraySegment<byte> Close(int usedSize)
         {
             ArraySegment<byte> segment = new ArraySegment<byte>(_buffer, _usedSize, usedSize);
-            _usedSize =+ usedSize;
+            _usedSize += usedSize;
             return segment;
         }
     }

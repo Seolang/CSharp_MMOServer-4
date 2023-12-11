@@ -12,7 +12,7 @@ namespace ServerCore
         // 쓰레드끼리의 경합을 막기 위해 ThreadLocal로 선언
         public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() => { return null; });
 
-        public static int ChunkSize { get; set; } = 65535 * 100;
+        public static int ChunkSize { get; set; } = 65535;
 
         public static ArraySegment<byte> Open(int reserveSize)
         {

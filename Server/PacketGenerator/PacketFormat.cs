@@ -22,7 +22,7 @@ using System.Collections.Generic;
 /*
 * 패킷을 받았을 때 해당 패킷을 알맞게 조립하는 클래스
 */
-class PacketManager
+public class PacketManager
 {{
     #region Singleton
     static PacketManager _instance = new PacketManager();
@@ -100,6 +100,7 @@ class PacketManager
 using System;
 using System.Net;
 using System.Text;
+using System.Collections.Generic;
 
 public enum PacketID
 {{
@@ -129,7 +130,7 @@ public interface IPacket
         // {3} 멤버 변수 Write
         public static string packetFormat =
 @"
-class {0} : IPacket
+public class {0} : IPacket
 {{
     {1}
 

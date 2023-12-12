@@ -31,7 +31,7 @@ namespace Server
 
         public void Execute() 
         { 
-            _room.BroadCast(_session, _chat);
+            // 할 작업
         }
     }
 

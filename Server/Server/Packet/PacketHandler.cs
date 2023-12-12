@@ -7,10 +7,9 @@ using ServerCore;
     */
 class PacketHandler
 {
-    // PlayerInfoReq 패킷 핸들러
-    public static void C_ChatHandler(PacketSession session, IPacket packet)
+    // LeaveGame 패킷 핸들러
+    public static void C_LeaveGameHandler(PacketSession session, IPacket packet)
     {
-        C_Chat chatPacket = packet as C_Chat;
         ClientSession clientSession = session as ClientSession;
 
         if (clientSession.Room == null)
@@ -19,7 +18,25 @@ class PacketHandler
         // BroadCast를 즉시 하지 않고, JobQueue로 처리
         GameRoom room = clientSession.Room; // 작업 예약 후 Room이 null로 바뀌어 Exception이 발생할 수도 있으므로 객체 주소를 복사해놓는다
         room.Push(
-            () => room.BroadCast(clientSession, chatPacket.chat)
+            () => room.Leave(clientSession)
+        );
+    }
+
+    // Move 패킷 핸들러
+    public static void C_MoveHandler(PacketSession session, IPacket packet)
+    {
+        C_Move movePacket = packet as C_Move;
+        ClientSession clientSession = session as ClientSession;
+
+        if (clientSession.Room == null)
+            return;
+
+        Console.WriteLine($"{movePacket.posX}, {movePacket.posY}, {movePacket.posZ}");
+
+        // BroadCast를 즉시 하지 않고, JobQueue로 처리
+        GameRoom room = clientSession.Room; // 작업 예약 후 Room이 null로 바뀌어 Exception이 발생할 수도 있으므로 객체 주소를 복사해놓는다
+        room.Push(
+            () => room.Move(clientSession, movePacket)
         );
     }
 }

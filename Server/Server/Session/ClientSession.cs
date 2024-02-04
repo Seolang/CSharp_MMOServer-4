@@ -5,7 +5,7 @@ using System.Text;
 namespace Server.Session
 {
     /*
-     * 서버측에서 클라이언트의 연결을 유지하는 클래스
+     * 서버 측에서 가지고 있는 클라이언트에 대한 세션
      */
     class ClientSession : PacketSession // Session Inteface를 통해 다양한 세션 타입 정의 가능
     {

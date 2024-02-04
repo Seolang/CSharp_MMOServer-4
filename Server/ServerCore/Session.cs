@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ServerCore
 {
+    /*
+     * 클라이언트 - 서버 간 패킷 교환을 수행하는 객체의 추상 클래스
+     */
     public abstract class PacketSession : Session
     {
         public static readonly int HeaderSize = 2;

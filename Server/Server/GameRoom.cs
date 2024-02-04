@@ -8,6 +8,9 @@ using ServerCore;
 
 namespace Server
 {
+    /*
+     * 여러 세션이 동시에 접속해 있는 단위
+     */
     class GameRoom : IJobQueue
     {
         List<ClientSession> _sessions = new();

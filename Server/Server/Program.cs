@@ -5,6 +5,9 @@ using ServerCore;
 
 namespace Server
 {
+    /*
+     * 메인 서버 프로그램
+     */
     class Program
     {
         static Listener _listner = new Listener();

@@ -2,6 +2,9 @@
 
 namespace Server
 {
+    /*
+     * Job Timer 요소 개체 선언
+     */
     struct JobTimerElement : IComparable<JobTimerElement>
     {
         public int execTick; // 실행 시간
@@ -13,8 +16,11 @@ namespace Server
         }
     }
 
-    // [20ms][20ms][20ms][20ms][20ms][][][][][][][][][][][][][][]
-    // 
+    /*
+     *  서버에서 실행할 동작을 틱레이트 단위로 구분하는 타이머 겸 Priority Queue
+     *  
+     *  [20ms][20ms][20ms][20ms][20ms][][][][][][][][][][][][][][]
+     */
     class JobTimer
     {
         PriorityQueue<JobTimerElement> _pq = new ();
